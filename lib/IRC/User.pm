@@ -1,11 +1,11 @@
-# Copyright (c) 2012 Ethrik Development Group
-# see doc/LICENSE for license information.
+# Copyright (c) 2012 Arinity
+# # see doc/LICENSE for license information.
 package IRC::User;
 
 use warnings;
 use strict;
 use base 'EventedObject';
-use Attributes qw(nick ident mask gecos host ip ts server modes uid channels account);
+use Attributes qw(nick ident mask gecos host ip ts server modes uid channels);
 
 sub new {
     my ($class, %opts) = @_;

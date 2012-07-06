@@ -12,17 +12,17 @@ Arinity IRC Services 1.0
 ------------------------------------------------------------
 ## 1. DESCRIPTION
 
-Arinity is a set of IRC Services in Perl. Arinity was created
-in February of 2012.
+SecureServ is a set of IRC Security Services in Perl. SecureServ was created
+in July of 2012.
 
 ## 2. DEVELOPERS
 
-Arinity IRC Bot is developed by Ethrik Development Group, a team
+SecureServ is developed by the ZTecNet Development Team, a team
 of people who contribute their time and knowledge to the
-maintenance of Arinity, and other projects.
+maintenance of SecureServ, and other projects.
 
-+ Matthew "mattwb65" Barksdale &lt;mattwb65@gmail.com&gt;
-+ Mitchell "ribayr" Cooper &lt;mitchell@notroll.net&gt;
++ Matthew "mattwb65" B. &lt;mattwb65@gmail.com&gt;
++ Nicholas "pie" W. &lt;pie@ztecnet.net&gt;
 
 ## 3. HOW TO INSTALL
 
@@ -34,7 +34,7 @@ Reserved. Currently there is no method of upgrading version.
 
 ## 5. HELP, BUGS, SUGGESTIONS
 
-For help with Arinity, you can in our IRC chatroom at irc.alphachat.net &#35;Arinity.
+For help with SecureServ, you can in our IRC chatroom at irc.ztecnet.net &#35;dev.
 
 To report a bug, please visit our IRC channel.
 Thanks for contributing by reporting issues!

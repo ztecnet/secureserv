@@ -1,0 +1,97 @@
+#!/usr/bin/perl
+# Copyright (c) 2012 Ethrik Development Group
+# see doc/LICENSE for license information.
+
+use warnings;
+use strict;
+use 5.010;
+
+# Set our program name.
+local $0 = 'arinity';
+
+# Parse options and find running directory
+our (%opts, $run_dir);
+BEGIN {
+    for (@ARGV) {
+        # --key=value argument
+        when (/--(.+?)=(.+)/) { $opts{$1} = $2 }
+
+        # -letter (-l) argument
+        when (/-(.{1})/) { $opts{flags}{$1} = 1 }
+    }
+
+    # No directory
+    $run_dir = $opts{dir};
+    if (!$run_dir) {
+        die 'No running directory specified. Run Arinity from its start script';
+    }
+    die 'Can\'t enter run directory' unless chdir $run_dir;
+
+    use lib 'lib';
+}
+
+# Dependencies
+use IO::Async;
+use IO::Socket::IP;
+
+# Core packages
+use API;
+use Conf;
+use Database;
+use EventedObject;
+use Logger;
+
+# Initialize Logger
+our $logger = Logger->new;
+
+# Add hook for fatal errors.
+$logger->on(FATAL => sub {
+    die "FATAL ERROR: $_[1]\n";
+}, 'core.fatal');
+
+# Setup Conf.
+our $conf = Conf->new('etc/arinity.conf');
+# hook to 'load' function to tell API.pm which modules to load immediately.
+$conf->on(function_load => sub { push @API::load_conf, $_[3] }, 'conf.function.load');
+$conf->parse or $logger->log(FATAL => 'Failed to parse configuration.');
+# Setup our database, but don't parse it until later.
+our $database = Database->new('etc/services.db');
+
+# Setup IO::Async.
+our $loop;
+if ($loop = $conf->get('main:loop')) {
+    $loop = eval {
+        require 'IO/Async/Loop/'.ucfirst($loop).'.pm';
+        ('IO::Async::Loop::'.ucfirst($loop))->new
+    };
+    $logger->log(FATAL => 'Specified \'loop\' options does not exist or is not installed on this system') if !$loop;
+}
+else {
+    $logger->log(FATAL => 'No \'loop\' option specified. This is most definitely required');
+}
+
+# Global variables
+our $DEBUG = 0; # Assume we're not in debug until otherwise told.
+
+# DEBUG (d) flag.
+if ($opts{flags}{d}) {
+    $DEBUG = 1;
+
+    # add hook to print all logging to STDOUT.
+    $logger->on(LOG_ALL => sub {
+        my ($info, $message) = @_;
+        say "DEBUG: $message";
+    }, 'core.debug');
+
+    $logger->log(INFO => 'Running in debug mode.');
+}
+
+# Load modules specified in configuration.
+API::load_config();
+# Parse database.
+$database->parse or $logger->log(FATAL => 'Failed to parse database.');
+
+# Enter main loop.
+$loop->loop_forever;
+
+# vim: set ai et sw=4 ts=4:

@@ -1,6 +1,6 @@
 # Copyright (c) 2012 Ethrik Development Group
 # see doc/LICENSE for license information.
-package M::operserv::eval;
+package M::secureserv::eval;
 
 use strict;
 use warnings;
@@ -9,24 +9,24 @@ use 5.010;
 our $svs;
 
 our $mod = API::Module->new(
-    name         => 'operserv/eval',
+    name         => 'secureserv/eval',
     version      => '1.0',
     description  => 'Creates EVAL command.',
     requirements => ['Logger', 'Command'],
-    dependencies => ['operserv/main'], 
+    dependencies => ['secureserv/main'], 
     initialize   => \&init,
     void         => \&void
 );
 
 sub init {
-    $mod::svs = $svs = IRC->get_service('operserv');
+    $mod::svs = $svs = IRC->get_service('secureserv');
     # Sanity checking.
-    $mod->log(MODLOAD_ERROR => 'Refusing to load. Operator service could not be found.') and return if !$svs;
+    $mod->log(MODLOAD_ERROR => 'Refusing to load. Security service could not be found.') and return if !$svs;
     # Create bindings.
     $mod->bind_command(
         name        => 'EVAL',
         description => 'Responds with result of evaluated perl code.',
-        helpfile    => 'operserv/eval',
+        helpfile    => 'secureserv/eval',
         handler     => \&cmd_eval
     );
     # We're good.

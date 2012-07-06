@@ -1,6 +1,6 @@
 # Copyright (c) 2012 Ethrik Development Group
 # see doc/LICENSE for license information.
-package M::operserv::uptime;
+package M::secureserv::uptime;
 
 use strict;
 use warnings;
@@ -9,24 +9,24 @@ use 5.010;
 our $svs;
 
 our $mod = API::Module->new(
-    name         => 'operserv/uptime',
+    name         => 'secureserv/uptime',
     version      => '1.0',
     description  => 'Creates UPTIME command.',
     requirements => ['Logger', 'Command'],
-    dependencies => ['operserv/main'], 
+    dependencies => ['secureserv/main'], 
     initialize   => \&init,
     void         => \&void
 );
 
 sub init {
-    $mod::svs = $svs = IRC->get_service('operserv');
+    $mod::svs = $svs = IRC->get_service('secureserv');
     # Sanity checking.
-    $mod->log(MODLOAD_ERROR => 'Refusing to load. Operator service could not be found.') and return if !$svs;
+    $mod->log(MODLOAD_ERROR => 'Refusing to load. Security service could not be found.') and return if !$svs;
     # Create bindings.
     $mod->bind_command(
         name        => 'UPTIME',
         description => 'Responds with services uptime.',
-        helpfile    => 'operserv/uptime',
+        helpfile    => 'secureserv/uptime',
         handler     => \&cmd_uptime
     );
     # We're good.

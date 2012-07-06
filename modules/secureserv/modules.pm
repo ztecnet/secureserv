@@ -1,6 +1,6 @@
-# Copyright (c) 2012 Ethrik Development Group
+# Copyright 2012 Ethrik Development Group
 # see doc/LICENSE for license information.
-package M::operserv::modules;
+package M::secureserv::modules;
 
 use strict;
 use warnings;
@@ -9,49 +9,49 @@ use 5.010;
 our $svs;
 
 our $mod = API::Module->new(
-    name         => 'operserv/modules',
+    name         => 'secureserv/modules',
     version      => '1.0',
-    description  => 'Creates commands useful for managing modules..',
+    description  => 'Creates commands useful for managing modules.',
     requirements => ['Logger', 'Command'],
-    dependencies => ['operserv/main'], 
+    dependencies => ['secureserv/main'], 
     initialize   => \&init,
     void         => \&void
 );
 
 sub init {
-    $mod::svs = $svs = IRC->get_service('operserv');
+    $mod::svs = $svs = IRC->get_service('secureserv');
     # Sanity checking.
-    $mod->log(MODLOAD_ERROR => 'Refusing to load. Channel service could not be found.') and return if !$svs;
+    $mod->log(MODLOAD_ERROR => 'Refusing to load. Security service could not be found.') and return if !$svs;
     # Create bindings.
     $mod->bind_command(
         name        => 'MODLOAD',
         description => 'Loads a module.',
-        helpfile    => 'operserv/modload',
+        helpfile    => 'secureserv/modload',
         handler     => \&cmd_modload
     );
     $mod->bind_command(
         name        => 'MODUNLOAD',
         description => 'Unloads a module.',
-        helpfile    => 'operserv/modunload',
+        helpfile    => 'secureserv/modunload',
         handler     => \&cmd_modunload
     );
     $mod->bind_command(
         name        => 'MODRELOAD',
         description => 'Reloads a module.',
-        helpfile    => 'operserv/modreload',
+        helpfile    => 'secureserv/modreload',
         handler     => \&cmd_modreload
     );
     # Create modload loading error hook.
-    $::logger->on(LOG_MODLOAD_ERROR => \&mod_error, 'operserv.moderr_log');
+    $::logger->on(LOG_MODLOAD_ERROR => \&mod_error, 'secureserv.moderr_log');
     # " " info hook.
-    $::logger->on(LOG_MODLOAD_INFO => \&mod_info, 'operserv.modinfo_log');
+    $::logger->on(LOG_MODLOAD_INFO => \&mod_info, 'secureserv.modinfo_log');
     # We're good.
     return 1;
 }
 
 sub void {
-    $::logger->del(LOG_MODLOAD_ERROR => 'operserv.moderr_log');
-    $::logger->del(LOG_MODLOAD_INFO => 'operserv.modinfo_log');
+    $::logger->del(LOG_MODLOAD_ERROR => 'secureserv.moderr_log');
+    $::logger->del(LOG_MODLOAD_INFO => 'secureserv.modinfo_log');
     return 1;
 }
 
